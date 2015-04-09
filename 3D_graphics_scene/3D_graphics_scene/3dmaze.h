@@ -2,6 +2,7 @@
 #define _3DMAZE_H
 
 #include <GL/glut.h>
+#include <stdio.h>
 #include <math.h>
 
 #define N 0
@@ -13,8 +14,7 @@
 typedef struct Wall {
 	bool way[4]; // N E S W
 	int type; // maybe somthing will use it
-	Wall() :way[0](false), way[1](false), way[2](false), way[3](false){}
-} Wall;
+} Wall;	
 
 /* Function */
 void Init(void);
@@ -24,6 +24,5 @@ void Keyboard(unsigned char, int, int);
 void Mouse(int, int, int, int);
 void Motion(int, int);
 
-void CreateMaze(int, int);
 
 #endif

@@ -66,8 +66,3 @@ void Motion(int x, int y)
 {
 
 }
-
-void CreateMaze(int length, int width)
-{
-
-}
