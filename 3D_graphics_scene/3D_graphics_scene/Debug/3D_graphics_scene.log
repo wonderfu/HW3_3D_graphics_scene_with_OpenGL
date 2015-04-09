@@ -1,4 +1,4 @@
-﻿Build started 2015/4/9 下午 08:40:52.
+﻿Build started 2015/4/9 下午 09:14:06.
      1>Project "C:\Users\粲富\Documents\GitHub\HW3_3D_graphics_scene_with_OpenGL\3D_graphics_scene\3D_graphics_scene\3D_graphics_scene.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt "D:\class\103下\圖形處理器架構與應用\OpenGL\OpenGL\OpenGL\openGL.cpp"
@@ -11,4 +11,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.32
+Time Elapsed 00:00:00.97
