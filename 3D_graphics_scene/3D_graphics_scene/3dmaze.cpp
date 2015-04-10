@@ -1,8 +1,8 @@
 #include "3dmaze.h"
 
 Wall **Map;
-GLdouble camera_eye[3] = {0.0,1.0,0.0};
-GLdouble camera_center[3] = {0.0,0.0,0.0};
+GLdouble camera_eye[3] = {5.0,2.0,5.0};
+GLdouble camera_center[3] = {0.0,3.0,0.0};
 GLdouble camera_up[3] = {0.0,1.0,0.0};
 
 GLfloat r;
@@ -27,20 +27,23 @@ int main(int argc, char *argv[])
 
 void Init(void)
 {
-	glOrtho(-5.0, 5.0, -5.0, 5.0, -5.0, 5.0);
 	glShadeModel(GL_SMOOTH);
-	glClearColor(0.0, 0.0, 0.0, 1.0);
-	glClearDepth(1.0);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
+	glClearColor(0.0, 0.0, 0.0, 1.0);
+	glClearDepth(1.0);
 }
 
 void Display(void)
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glOrtho(-10.0, 10.0, -10.0, 10.0, -10.0, 10.0);
+	gluLookAt(camera_eye[0], camera_eye[1], camera_eye[2], camera_center[0], camera_center[1], camera_center[2], camera_up[0], camera_up[1], camera_up[2]);
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glRotatef(45, -1.0, 0.0, 0.0);
 	glRotatef(45, 0.0, 0.0, 1.0);
 	glRotatef(r, 1.0, 1.0, 1.0);
@@ -87,19 +90,12 @@ void Display(void)
 
 		glEnd();
 	glPopMatrix();
-	glFlush();
 }
 
 void Idle(void)
 {
 	glutSwapBuffers();
 	glutPostRedisplay();
-	glMatrixMode(GL_MODELVIEW);
-	gluLookAt(camera_eye[0], camera_eye[1], camera_eye[2], camera_center[0], camera_center[1], camera_center[2], camera_up[0], camera_up[1], camera_up[2]);
-	glLoadIdentity();
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-
 }
 
 void Keyboard(unsigned char key, int x, int y)
@@ -108,19 +104,19 @@ void Keyboard(unsigned char key, int x, int y)
 	{
 		case 'w':
 		case 'W':
-			camera_eye[2] - MoveUnit;
+			camera_eye[2] -= MoveUnit;
 			break;
 		case 's':
 		case 'S':
-			camera_eye[2] + MoveUnit;
+			camera_eye[2] += MoveUnit;
 			break;
 		case 'a':
 		case 'A':
-			camera_eye[0] - MoveUnit;
+			camera_eye[0] -= MoveUnit;
 			break;
 		case 'd':
 		case 'D':
-			camera_eye[0] + MoveUnit;
+			camera_eye[0] += MoveUnit;
 			break;
 
 		default:

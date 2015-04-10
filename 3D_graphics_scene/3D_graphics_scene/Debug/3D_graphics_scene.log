@@ -1,12 +1,8 @@
-﻿Build started 2015/4/10 下午 05:20:41.
+﻿Build started 2015/4/11 上午 12:24:00.
      1>Project "C:\Users\粲富\Documents\GitHub\HW3_3D_graphics_scene_with_OpenGL\3D_graphics_scene\3D_graphics_scene\3D_graphics_scene.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt 3dmaze.cpp
          3dmaze.cpp
-     1>c:\users\粲富\documents\github\hw3_3d_graphics_scene_with_opengl\3d_graphics_scene\3d_graphics_scene\3dmaze.cpp(111): warning C4552: '-' : operator has no effect; expected operator with side-effect
-     1>c:\users\粲富\documents\github\hw3_3d_graphics_scene_with_opengl\3d_graphics_scene\3d_graphics_scene\3dmaze.cpp(115): warning C4552: '+' : operator has no effect; expected operator with side-effect
-     1>c:\users\粲富\documents\github\hw3_3d_graphics_scene_with_opengl\3d_graphics_scene\3d_graphics_scene\3dmaze.cpp(119): warning C4552: '-' : operator has no effect; expected operator with side-effect
-     1>c:\users\粲富\documents\github\hw3_3d_graphics_scene_with_opengl\3d_graphics_scene\3d_graphics_scene\3dmaze.cpp(123): warning C4552: '+' : operator has no effect; expected operator with side-effect
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\粲富\Documents\GitHub\HW3_3D_graphics_scene_with_OpenGL\3D_graphics_scene\Debug\3D_graphics_scene.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib glut32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\粲富\Documents\GitHub\HW3_3D_graphics_scene_with_OpenGL\3D_graphics_scene\Debug\3D_graphics_scene.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\粲富\Documents\GitHub\HW3_3D_graphics_scene_with_OpenGL\3D_graphics_scene\Debug\3D_graphics_scene.lib" /MACHINE:X86 Debug\3dmaze.obj
          3D_graphics_scene.vcxproj -> C:\Users\粲富\Documents\GitHub\HW3_3D_graphics_scene_with_OpenGL\3D_graphics_scene\Debug\3D_graphics_scene.exe
@@ -14,4 +10,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.39
+Time Elapsed 00:00:00.26
