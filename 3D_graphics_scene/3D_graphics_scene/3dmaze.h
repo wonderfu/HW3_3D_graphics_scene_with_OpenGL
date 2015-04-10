@@ -5,10 +5,12 @@
 #include <stdio.h>
 #include <math.h>
 
+#define PI 3.14159f
 #define N 0
 #define E 1
 #define S 2
 #define W 3
+#define MoveUnit 1
 
 /* Struct */
 typedef struct Wall {

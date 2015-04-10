@@ -1,6 +1,10 @@
 #include "3dmaze.h"
 
 Wall **Map;
+GLdouble camera_eye[3] = {0.0,1.0,0.0};
+GLdouble camera_center[3] = {0.0,0.0,0.0};
+GLdouble camera_up[3] = {0.0,1.0,0.0};
+
 GLfloat r;
 
 int main(int argc, char *argv[])
@@ -90,11 +94,34 @@ void Idle(void)
 {
 	glutSwapBuffers();
 	glutPostRedisplay();
+	glLoadIdentity();
+	gluLookAt(camera_eye[0], camera_eye[1], camera_eye[2], camera_center[0], camera_center[1], camera_center[2], camera_up[0], camera_up[1], camera_up[2]);
 }
 
 void Keyboard(unsigned char key, int x, int y)
 {
+	switch (key)
+	{
+		case 'w':
+		case 'W':
+			camera_eye[2] - MoveUnit;
+			break;
+		case 's':
+		case 'S':
+			camera_eye[2] + MoveUnit;
+			break;
+		case 'a':
+		case 'A':
+			camera_eye[0] - MoveUnit;
+			break;
+		case 'd':
+		case 'D':
+			camera_eye[0] + MoveUnit;
+			break;
 
+		default:
+			break;
+	}
 }
 
 void Mouse(int button, int state, int x, int y)
