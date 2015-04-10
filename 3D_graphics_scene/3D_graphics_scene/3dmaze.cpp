@@ -94,8 +94,12 @@ void Idle(void)
 {
 	glutSwapBuffers();
 	glutPostRedisplay();
-	glLoadIdentity();
+	glMatrixMode(GL_MODELVIEW);
 	gluLookAt(camera_eye[0], camera_eye[1], camera_eye[2], camera_center[0], camera_center[1], camera_center[2], camera_up[0], camera_up[1], camera_up[2]);
+	glLoadIdentity();
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
 }
 
 void Keyboard(unsigned char key, int x, int y)
