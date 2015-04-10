@@ -1,13 +1,14 @@
 #include "3dmaze.h"
 
 Wall **Map;
+GLfloat r;
 
 int main(int argc, char *argv[])
 {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 	glutInitWindowPosition(200, 100);
-	glutInitWindowSize(800, 600);
+	glutInitWindowSize(800, 800);
 	glutCreateWindow("3D Maze");
 	glutKeyboardFunc(Keyboard);
 	glutMouseFunc(Mouse);
@@ -22,7 +23,7 @@ int main(int argc, char *argv[])
 
 void Init(void)
 {
-	glOrtho(-10.0, 10.0, -10.0, 10.0, -10.0, 10.0);
+	glOrtho(-5.0, 5.0, -5.0, 5.0, -5.0, 5.0);
 	glShadeModel(GL_SMOOTH);
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClearDepth(1.0);
@@ -34,21 +35,60 @@ void Init(void)
 
 void Display(void)
 {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glLoadIdentity();
+	glRotatef(45, -1.0, 0.0, 0.0);
+	glRotatef(45, 0.0, 0.0, 1.0);
+	glRotatef(r, 1.0, 1.0, 1.0);
+	r += 0.5;
+
 	glPushMatrix();
-	glBegin(GL_TRIANGLES);          // 開始劃三角形 
-	glColor3f(1.0f, 0.0f, 0.0f);         // 設定輸出色為紅色 
-	glVertex2f(0.0f, 1.0f);           //(x1,y1)=(0, 1)
-	glColor3f(0.0f, 1.0f, 0.0f);         // 設定輸出色為綠色 
-	glVertex2f(0.87f, -0.5f);            //(x2,y2)=(0.87,-0.5)
-	glColor3f(0.0f, 0.0f, 1.0f);         // 設定輸出色為藍色 
-	glVertex2f(-0.87f, -0.5f);           //(x3,y3)=(-0.87,-0.5)
-	glEnd();                               // 結束劃三角形 
+		glBegin(GL_QUADS);
+
+		glColor3f(0.0, 1.0, 0.0);			// G
+		glVertex3f( 2, 1,-2);			// TOP  UPPER RIGHT
+		glVertex3f(-2, 1,-2);			// TOP  UPPER LEFT
+		glVertex3f(-2, 1, 2);			// TOP  LOWER LEFT
+		glVertex3f( 2, 1, 2);			// TOP  LOWER RIGHT
+
+		glColor3f(1.0, 0.0, 1.0);			// M
+		glVertex3f( 2,-1, 2);			// BOTTOM  UPPER RIGHT
+		glVertex3f(-2,-1, 2);			// BOTTOM  UPPER LEFT
+		glVertex3f(-2,-1,-2);			// BOTTOM  LOWER LEFT
+		glVertex3f( 2,-1,-2);			// BOTTOM  LOWER RIGHT
+
+		glColor3f(0.0, 1.0, 1.0);			// R
+		glVertex3f( 2, 2, 1);			// FRONT  UPPER RIGHT
+		glVertex3f(-2, 2, 1);			// FRONT  UPPER LEFT
+		glVertex3f(-2,-2, 1);			// FRONT  LOWER LEFT
+		glVertex3f( 2,-2, 1);			// FRONT  LOWER RIGHT
+
+		glColor3f(1.0, 0.0, 0.0);			// C
+		glVertex3f( 2,-2,-1);			// REAR  UPPER RIGHT
+		glVertex3f(-2,-2,-1);			// REAR  UPPER LEFT
+		glVertex3f(-2, 2,-1);			// REAR  LOWER LEFT
+		glVertex3f( 2, 2,-1);			// REAR  LOWER RIGHT
+
+		glColor3f(1.0, 1.0, 0.0);			// B
+		glVertex3f(-1, 2, 2);			// LEFT  UPPER RIGHT
+		glVertex3f(-1, 2,-2);			// LEFT  UPPER LEFT 
+		glVertex3f(-1,-2,-2);			// LEFT  LOWER LEFT 
+		glVertex3f(-1,-2, 2);			// LEFT  LOWER RIGHT
+
+		glColor3f(0.0, 0.0, 1.0);			// Y
+		glVertex3f(1, 2,-2);			// RIGHT  UPPER RIGHT
+		glVertex3f(1, 2, 2);			// RIGHT  UPPER LEFT 
+		glVertex3f(1,-2, 2);			// RIGHT  LOWER LEFT 
+		glVertex3f(1,-2,-2);			// RIGHT  LOWER RIGHT
+
+		glEnd();
 	glPopMatrix();
-	glutSwapBuffers();
+	glFlush();
 }
 
 void Idle(void)
 {
+	glutSwapBuffers();
 	glutPostRedisplay();
 }
 

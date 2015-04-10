@@ -24,5 +24,4 @@ void Keyboard(unsigned char, int, int);
 void Mouse(int, int, int, int);
 void Motion(int, int);
 
-
 #endif
