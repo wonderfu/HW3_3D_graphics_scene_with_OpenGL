@@ -175,8 +175,8 @@ void Keyboard(unsigned char key, int x, int y)
 			camera_eye[0] += MoveSpeed;
 			camera_center[0] += MoveSpeed;
 			break;
-
-		default:
+		case 27: //ESC
+			exit(0);
 			break;
 	}
 }
