@@ -10,7 +10,7 @@
 #define E 1
 #define S 2
 #define W 3
-#define MoveUnit 1
+#define MoveSpeed 1
 
 /* Struct */
 typedef struct Wall {
