@@ -7,6 +7,52 @@ GLdouble camera_up[3] = {0.0,1.0,0.0};
 
 GLfloat r;
 
+void drawwall(float x, float y){
+
+	glPushMatrix();
+	glTranslatef(x, y, 0);
+
+	glBegin(GL_POLYGON);
+	glColor3f(1.0f, 0.0f, 0.0f);         // 設定輸出色為紅色 
+	glVertex3f(0.5f, 0.5f, 5.0f);
+	glVertex3f(-0.5f, 0.5f, 5.0f);
+	glVertex3f(-0.5f, 0.5f, 0.0f);
+	glVertex3f(0.5f, 0.5f, 0.0f);
+	glEnd();
+
+	glBegin(GL_POLYGON);
+	glColor3f(0.0f, 1.0f, 0.0f);         // 設定輸出色為綠色 
+	glVertex3f(-0.5f, 0.5f, 5.0f);
+	glVertex3f(-0.5f, -0.5f, 5.0f);
+	glVertex3f(-0.5f, -0.5f, 0.0f);
+	glVertex3f(-0.5f, 0.5f, 0.0f);
+	glEnd();
+
+	glBegin(GL_POLYGON);
+	glColor3f(1.0f, 0.0f, 1.0f);         // 設定輸出色為紫色 
+	glVertex3f(-0.5f, -0.5f, 5.0f);
+	glVertex3f(0.5f, -0.5f, 5.0f);
+	glVertex3f(0.5f, -0.5f, 0.0f);
+	glVertex3f(-0.5f, -0.5f, 0.0f);
+	glEnd();
+
+	glBegin(GL_POLYGON);
+	glColor3f(0.0f, 1.0f, 1.0f);         // 設定輸出色為黃色 
+	glVertex3f(0.5f, -0.5f, 5.0f);
+	glVertex3f(0.5f, 0.5f, 5.0f);
+	glVertex3f(0.5f, 0.5f, 0.0f);
+	glVertex3f(0.5f, -0.5f, 0.0f);
+	glEnd();
+
+
+	glPopMatrix();
+	glutSwapBuffers();
+
+	return;
+}
+
+
+
 int main(int argc, char *argv[])
 {
 	glutInit(&argc, argv);
@@ -50,6 +96,7 @@ void Display(void)
 	glRotatef(r, 1.0, 1.0, 1.0);
 	r += 0.5;
 
+
 	glPushMatrix();
 		glBegin(GL_QUADS);
 
@@ -91,6 +138,7 @@ void Display(void)
 
 		glEnd();
 	glPopMatrix();
+
 }
 
 void Idle(void)
