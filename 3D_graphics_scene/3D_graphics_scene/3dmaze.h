@@ -21,6 +21,7 @@ typedef struct Wall {
 /* Function */
 void Init(void);
 void Display(void);
+void Reshape(int, int);
 void Idle(void);
 void Keyboard(unsigned char, int, int);
 void Mouse(int, int, int, int);

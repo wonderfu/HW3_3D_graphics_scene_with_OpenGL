@@ -18,6 +18,7 @@ int main(int argc, char *argv[])
 	glutMouseFunc(Mouse);
 	glutMotionFunc(Motion);
 	glutIdleFunc(Idle);
+	glutReshapeFunc(Reshape);
 	glutDisplayFunc(Display);
 	
 	Init();
@@ -96,6 +97,15 @@ void Idle(void)
 {
 	glutSwapBuffers();
 	glutPostRedisplay();
+}
+
+void Reshape(int w, int h)
+{
+	glViewport(0, 0, (GLsizei)w, (GLsizei)h);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective(60.0, (GLfloat)w / (GLfloat)h, 1.0, 20.0);
+	glMatrixMode(GL_MODELVIEW);
 }
 
 void Keyboard(unsigned char key, int x, int y)
