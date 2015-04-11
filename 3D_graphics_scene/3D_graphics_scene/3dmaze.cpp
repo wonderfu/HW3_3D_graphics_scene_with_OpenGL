@@ -41,7 +41,7 @@ void Display(void)
 	glLoadIdentity();
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glOrtho(-10.0, 10.0, -10.0, 10.0, -10.0, 10.0);
+	glOrtho(-100.0, 100.0, -100.0, 100.0, -100.0, 100.0);
 	gluLookAt(camera_eye[0], camera_eye[1], camera_eye[2], camera_center[0], camera_center[1], camera_center[2], camera_up[0], camera_up[1], camera_up[2]);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
