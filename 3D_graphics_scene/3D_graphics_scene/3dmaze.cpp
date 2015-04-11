@@ -1,11 +1,22 @@
 #include "3dmaze.h"
 
-Wall **Map;
+/*window*/
+int window_size[2] = { 800, 800 };
+
+/* camera */
 GLdouble camera_eye[3] = {0.0,0.0,20.0};
 GLdouble camera_center[3] = {0.0,0.0,0.0};
 GLdouble camera_up[3] = {0.0,1.0,0.0};
+GLfloat angle = 0.0;
+GLfloat cx = 0.0, cz = -1.0;
+
+/* mouse */
+int old_mouse_pos[2] = { window_size[0]>>1, window_size[1]>>1 };
+float deltaAngle = 0.0f;
+float deltaMove = 0;
 
 GLfloat r;
+Wall **Map;
 
 void drawwall(float x, float y){
 
@@ -47,18 +58,16 @@ void drawwall(float x, float y){
 	return;
 }
 
-
-
 int main(int argc, char *argv[])
 {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 	glutInitWindowPosition(200, 100);
-	glutInitWindowSize(800, 800);
+	glutInitWindowSize(window_size[0], window_size[1]);
 	glutCreateWindow("3D Maze");
 	glutKeyboardFunc(Keyboard);
 	glutMouseFunc(Mouse);
-	glutMotionFunc(Motion);
+	glutPassiveMotionFunc(Motion);
 	glutIdleFunc(Idle);
 	glutReshapeFunc(Reshape);
 	glutDisplayFunc(Display);
@@ -77,14 +86,14 @@ void Init(void)
 	glClearDepth(1.0);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(60.0, (GLfloat)800 / (GLfloat)800, 1.0, 100.0);
+	gluPerspective(60.0, (GLfloat)window_size[0] / (GLfloat)window_size[1], 1.0, 100.0);
 }
 
 void Display(void)
 {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(camera_eye[0], camera_eye[1], camera_eye[2], camera_center[0], camera_center[1], camera_center[2], camera_up[0], camera_up[1], camera_up[2]);
+	gluLookAt(camera_eye[0], camera_eye[1], camera_eye[2], camera_eye[0]+cx, camera_center[1], camera_eye[2]+cz, camera_up[0], camera_up[1], camera_up[2]);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -149,6 +158,8 @@ void Reshape(int w, int h)
 	glLoadIdentity();
 	gluPerspective(60.0, (GLfloat)w / (GLfloat)h, 1.0, 100.0);
 	glMatrixMode(GL_MODELVIEW);
+	window_size[0] = w;
+	window_size[1] = h;
 }
 
 void Keyboard(unsigned char key, int x, int y)
@@ -188,5 +199,19 @@ void Mouse(int button, int state, int x, int y)
 
 void Motion(int x, int y)
 {
-
+	deltaAngle = (x - camera_eye[0]) * 0.001f;
+	cx = sin(angle + deltaAngle);
+	cz = -cos(angle + deltaAngle);
+	
+	/*
+	int move_dis[2];
+	move_dis[0] = x - old_mouse_pos[0];
+	move_dis[1] = (window_size[1] - y) - old_mouse_pos[1];
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glRotated(10, 0, 1, 0);
+	glRotated(10, 0, 0, 1);
+	old_mouse_pos[0] = x;
+	old_mouse_pos[1] = y;
+	*/
 }
