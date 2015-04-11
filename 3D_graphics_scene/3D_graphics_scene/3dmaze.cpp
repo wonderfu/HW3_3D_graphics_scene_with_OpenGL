@@ -14,34 +14,34 @@ void drawwall(float x, float y){
 	
 		glBegin(GL_POLYGON);
 			glColor3f(1.0f, 0.0f, 0.0f);         // 設定輸出色為紅色 
-			glVertex3f(0.5f, 0.5f, 5.0f);
-			glVertex3f(-0.5f, 0.5f, 5.0f);
-			glVertex3f(-0.5f, 0.5f, 0.0f);
-			glVertex3f(0.5f, 0.5f, 0.0f);
+			glVertex3f(0.5f, 5.0f, 0.5f);
+			glVertex3f(-0.5f, 5.0f, 0.5f);
+			glVertex3f(-0.5f, 0.0f, 0.5f);
+			glVertex3f(0.5f, 0.0f, 0.5f);
 		glEnd();
 	
 		glBegin(GL_POLYGON);
-			glColor3f(0.0f, 1.0f, 0.0f);         // 設定輸出色為綠色 
-			glVertex3f(-0.5f, 0.5f, 5.0f);
-			glVertex3f(-0.5f, -0.5f, 5.0f);
-			glVertex3f(-0.5f, -0.5f, 0.0f);
-			glVertex3f(-0.5f, 0.5f, 0.0f);
+			glColor3f(0.0f, 0.0f, 1.0f);         // 設定輸出色為綠色 
+			glVertex3f(-0.5f, 5.0f, 0.5f);
+			glVertex3f(-0.5f, 5.0f, -0.5f);
+			glVertex3f(-0.5f, 0.0f, -0.5f);
+			glVertex3f(-0.5f, 0.0f, 0.5f);
 		glEnd();
 	
 		glBegin(GL_POLYGON);
 			glColor3f(1.0f, 0.0f, 1.0f);         // 設定輸出色為紫色 
-			glVertex3f(-0.5f, -0.5f, 5.0f);
-			glVertex3f(0.5f, -0.5f, 5.0f);
-			glVertex3f(0.5f, -0.5f, 0.0f);
-			glVertex3f(-0.5f, -0.5f, 0.0f);
+			glVertex3f(-0.5f, 5.0f, -0.5f);
+			glVertex3f(0.5f, 5.0f, -0.5f);
+			glVertex3f(0.5f, 0.0f, -0.5f);
+			glVertex3f(-0.5f, 0.0f, -0.5f);
 		glEnd();
 	
 		glBegin(GL_POLYGON);
 			glColor3f(0.0f, 1.0f, 1.0f);         // 設定輸出色為黃色 
-			glVertex3f(0.5f, -0.5f, 5.0f);
-			glVertex3f(0.5f, 0.5f, 5.0f);
-			glVertex3f(0.5f, 0.5f, 0.0f);
-			glVertex3f(0.5f, -0.5f, 0.0f);
+			glVertex3f(0.5f, 5.0f, -0.5f);
+			glVertex3f(0.5f, 5.0f, 0.5f);
+			glVertex3f(0.5f, 0.0f, 0.5f);
+			glVertex3f(0.5f, 0.0f, -0.5f);
 		glEnd();
 	glPopMatrix();
 	return;
@@ -133,7 +133,7 @@ void Display(void)
 	
 		glEnd();
 	glPopMatrix();
-	drawwall(0.0, 0.0);
+	drawwall(2.0, 2.0);
 }
 
 void Idle(void)
