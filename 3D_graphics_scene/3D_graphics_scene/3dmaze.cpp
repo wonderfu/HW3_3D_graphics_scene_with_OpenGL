@@ -4,11 +4,11 @@
 int window_size[2] = { 800, 800 };
 
 /* camera */
-GLdouble camera_eye[3] = {0.0,0.0,20.0};
-GLdouble camera_center[3] = {0.0,0.0,0.0};
-GLdouble camera_up[3] = {0.0,1.0,0.0};
-GLfloat angle = 0.0;
-GLfloat cx = 0.0, cz = -1.0;
+GLdouble camera_eye[3] = { 0.0, 0.0, 20.0 };
+GLdouble camera_center[3] = { 0.0, 0.0, 0.0 };
+GLdouble camera_up[3] = { 0.0, 1.0, 0.0 };
+GLfloat camera_angle = 0.0;
+GLdouble camera_ray[3] = { 0.0, 0.0, -1.0 }; // eye & angle & ray decide center 
 
 /* mouse */
 int old_mouse_pos[2] = { window_size[0]>>1, window_size[1]>>1 };
@@ -24,7 +24,7 @@ void drawwall(float x, float y){
 		glTranslatef(x, y, 0);
 	
 		glBegin(GL_POLYGON);
-			glColor3f(1.0f, 0.0f, 0.0f);         // 設定輸出色為紅色 
+			glColor3f(1.0f, 0.0f, 0.0f);         // Red
 			glVertex3f(0.5f, 5.0f, 0.5f);
 			glVertex3f(-0.5f, 5.0f, 0.5f);
 			glVertex3f(-0.5f, 0.0f, 0.5f);
@@ -32,7 +32,7 @@ void drawwall(float x, float y){
 		glEnd();
 	
 		glBegin(GL_POLYGON);
-			glColor3f(0.0f, 0.0f, 1.0f);         // 設定輸出色為綠色 
+			glColor3f(0.0f, 0.0f, 1.0f);         // Blue
 			glVertex3f(-0.5f, 5.0f, 0.5f);
 			glVertex3f(-0.5f, 5.0f, -0.5f);
 			glVertex3f(-0.5f, 0.0f, -0.5f);
@@ -40,7 +40,7 @@ void drawwall(float x, float y){
 		glEnd();
 	
 		glBegin(GL_POLYGON);
-			glColor3f(1.0f, 0.0f, 1.0f);         // 設定輸出色為紫色 
+			glColor3f(1.0f, 0.0f, 1.0f);         // Magenta
 			glVertex3f(-0.5f, 5.0f, -0.5f);
 			glVertex3f(0.5f, 5.0f, -0.5f);
 			glVertex3f(0.5f, 0.0f, -0.5f);
@@ -48,7 +48,7 @@ void drawwall(float x, float y){
 		glEnd();
 	
 		glBegin(GL_POLYGON);
-			glColor3f(0.0f, 1.0f, 1.0f);         // 設定輸出色為黃色 
+			glColor3f(0.0f, 1.0f, 1.0f);         // Cyan
 			glVertex3f(0.5f, 5.0f, -0.5f);
 			glVertex3f(0.5f, 5.0f, 0.5f);
 			glVertex3f(0.5f, 0.0f, 0.5f);
@@ -93,55 +93,13 @@ void Display(void)
 {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(camera_eye[0], camera_eye[1], camera_eye[2], camera_eye[0]+cx, camera_center[1], camera_eye[2]+cz, camera_up[0], camera_up[1], camera_up[2]);
+	camera_center[0] = camera_eye[0] + camera_ray[0];
+	camera_center[1] = camera_eye[1] + camera_ray[1];
+	camera_center[2] = camera_eye[2] + camera_ray[2];
+	gluLookAt(camera_eye[0], camera_eye[1], camera_eye[2], camera_center[0], camera_center[1], camera_center[2], camera_up[0], camera_up[1], camera_up[2]);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glPushMatrix();
-		glRotatef(45, -1.0, 0.0, 0.0);
-		glRotatef(45, 0.0, 0.0, 1.0);
-		glRotatef(r, 1.0, 1.0, 1.0);
-		r += 0.5;
-		glBegin(GL_QUADS);
-	
-			glColor3f(0.0, 1.0, 0.0);			// G
-			glVertex3f( 2, 1,-2);			// TOP  UPPER RIGHT
-			glVertex3f(-2, 1,-2);			// TOP  UPPER LEFT
-			glVertex3f(-2, 1, 2);			// TOP  LOWER LEFT
-			glVertex3f( 2, 1, 2);			// TOP  LOWER RIGHT
-	
-			glColor3f(1.0, 0.0, 1.0);			// M
-			glVertex3f( 2,-1, 2);			// BOTTOM  UPPER RIGHT
-			glVertex3f(-2,-1, 2);			// BOTTOM  UPPER LEFT
-			glVertex3f(-2,-1,-2);			// BOTTOM  LOWER LEFT
-			glVertex3f( 2,-1,-2);			// BOTTOM  LOWER RIGHT
-	
-			glColor3f(0.0, 1.0, 1.0);			// R
-			glVertex3f( 2, 2, 1);			// FRONT  UPPER RIGHT
-			glVertex3f(-2, 2, 1);			// FRONT  UPPER LEFT
-			glVertex3f(-2,-2, 1);			// FRONT  LOWER LEFT
-			glVertex3f( 2,-2, 1);			// FRONT  LOWER RIGHT
-	
-			glColor3f(1.0, 0.0, 0.0);			// C
-			glVertex3f( 2,-2,-1);			// REAR  UPPER RIGHT
-			glVertex3f(-2,-2,-1);			// REAR  UPPER LEFT
-			glVertex3f(-2, 2,-1);			// REAR  LOWER LEFT
-			glVertex3f( 2, 2,-1);			// REAR  LOWER RIGHT
-	
-			glColor3f(1.0, 1.0, 0.0);			// B
-			glVertex3f(-1, 2, 2);			// LEFT  UPPER RIGHT
-			glVertex3f(-1, 2,-2);			// LEFT  UPPER LEFT 
-			glVertex3f(-1,-2,-2);			// LEFT  LOWER LEFT 
-			glVertex3f(-1,-2, 2);			// LEFT  LOWER RIGHT
-	
-			glColor3f(0.0, 0.0, 1.0);			// Y
-			glVertex3f(1, 2,-2);			// RIGHT  UPPER RIGHT
-			glVertex3f(1, 2, 2);			// RIGHT  UPPER LEFT 
-			glVertex3f(1,-2, 2);			// RIGHT  LOWER LEFT 
-			glVertex3f(1,-2,-2);			// RIGHT  LOWER RIGHT
-	
-		glEnd();
-	glPopMatrix();
 	drawwall(2.0, 2.0);
 }
 
@@ -200,18 +158,6 @@ void Mouse(int button, int state, int x, int y)
 void Motion(int x, int y)
 {
 	deltaAngle = (x - camera_eye[0]) * 0.001f;
-	cx = sin(angle + deltaAngle);
-	cz = -cos(angle + deltaAngle);
-	
-	/*
-	int move_dis[2];
-	move_dis[0] = x - old_mouse_pos[0];
-	move_dis[1] = (window_size[1] - y) - old_mouse_pos[1];
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	glRotated(10, 0, 1, 0);
-	glRotated(10, 0, 0, 1);
-	old_mouse_pos[0] = x;
-	old_mouse_pos[1] = y;
-	*/
+	camera_ray[0] = sin(camera_angle + deltaAngle);
+	camera_ray[2] = -cos(camera_angle + deltaAngle);
 }
