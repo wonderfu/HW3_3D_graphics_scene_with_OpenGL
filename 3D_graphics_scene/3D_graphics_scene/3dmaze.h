@@ -5,7 +5,8 @@
 #include <stdio.h>
 #include <math.h>
 
-#define PI 3.14159f
+#define PI 3.14159265359
+#define PI_180 0.01745329251
 #define N 0
 #define E 1
 #define S 2

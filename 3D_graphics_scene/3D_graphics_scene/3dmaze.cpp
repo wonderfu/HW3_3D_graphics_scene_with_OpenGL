@@ -157,7 +157,7 @@ void Mouse(int button, int state, int x, int y)
 
 void Motion(int x, int y)
 {
-	deltaAngle = (x - camera_eye[0]) * 0.001f;
+	deltaAngle = x/window_size[0] * 0.001f;
 	camera_ray[0] = sin(camera_angle + deltaAngle);
 	camera_ray[2] = -cos(camera_angle + deltaAngle);
 }
