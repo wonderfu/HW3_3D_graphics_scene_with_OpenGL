@@ -1,19 +1,19 @@
 #include "3dmaze.h"
 
-/*window*/
+/* Window */
 int window_size[2] = { 800, 800 }; // W H
 
-/* camera */
+/* Camera */
 GLdouble camera_eye[3] = { 0.0, 0.0, 20.0 };
 GLdouble camera_center[3] = { 0.0, 0.0, 0.0 };
 GLdouble camera_up[3] = { 0.0, 1.0, 0.0 };
 GLfloat camera_angle = 0.0, camera_RL_angle = 0.0;
 GLdouble camera_ray[3] = { 0.0, 0.0, -1.0 }; // eye & angle & ray decide center 
 
-/* mouse */
+/* Mouse */
 int old_mouse_pos[2] = { window_size[0] >> 1, window_size[1] >> 1 };
 
-GLfloat r;
+/* Maze */
 Wall **Map;
 
 void drawwall(float x, float y){
@@ -77,12 +77,19 @@ int main(int argc, char *argv[])
 
 void Init(void)
 {
+	glClearColor(0.0, 0.0, 0.0, 1.0);
+
+	//glEnable(GL_LIGHTING);
+	//glEnable(GL_LIGHT0);
+	//glEnable(GL_LIGHT1);
 	glShadeModel(GL_SMOOTH);
+
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
-	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClearDepth(1.0);
+
 	glutSetCursor(GLUT_CURSOR_NONE);
+
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(60.0, (GLfloat)window_size[0] / (GLfloat)window_size[1], 1.0, 100.0);
@@ -100,6 +107,7 @@ void Display(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	drawwall(2.0, 2.0);
+	LightSource();
 }
 
 void Idle(void)
@@ -156,8 +164,13 @@ void Mouse(int button, int state, int x, int y)
 
 void Motion(int x, int y)
 {
-	camera_RL_angle += ((GLdouble)x / window_size[0]) * PI;
-	camera_angle += camera_RL_angle - (PI / 2);
+	camera_RL_angle = ((GLdouble)x / window_size[0]) * PI;
+	camera_angle = camera_RL_angle - (PI / 2);
 	camera_ray[0] = sin(camera_angle);
 	camera_ray[2] = -cos(camera_angle);
+}
+
+void LightSource(void)
+{
+
 }

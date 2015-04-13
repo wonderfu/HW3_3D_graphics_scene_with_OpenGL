@@ -28,5 +28,6 @@ void Idle(void);
 void Keyboard(unsigned char, int, int);
 void Mouse(int, int, int, int);
 void Motion(int, int);
+void LightSource(void);
 
 #endif
