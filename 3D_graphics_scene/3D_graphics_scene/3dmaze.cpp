@@ -15,7 +15,7 @@ bool test_light = true;
 GLfloat light0_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
 GLfloat light0_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
 GLfloat light0_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-GLfloat light0_position[] = { 0.0, 30.0, 0.0, 1.0 };
+GLfloat light0_position[] = { 0.0, 200.0, 0.0, 1.0 };
 
 /* Light1 */
 bool flash_light = true;
@@ -138,13 +138,14 @@ void Display(void)
 
 	/* Camera */
 	camera_center[0] = camera_eye[0] + camera_ray[0];
-	camera_center[1] = camera_eye[1] + camera_ray[1];
+	//camera_center[1] = camera_eye[1] + camera_ray[1];
 	camera_center[2] = camera_eye[2] + camera_ray[2];
 	gluLookAt(camera_eye[0], camera_eye[1], camera_eye[2], camera_center[0], camera_center[1], camera_center[2], camera_up[0], camera_up[1], camera_up[2]);
 
 	/* Light */
 	LightSource();
-
+	/* Material */
+	//Material();
 	/* Maze */
 	GLfloat floor_half_w, floor_half_h;
 
@@ -179,6 +180,7 @@ void Display(void)
 				DrawWall((map_half_h - i)*Wall_W, (map_half_w - j)*Wall_W);
 		}
 	}
+	glFlush();
 }
 
 void Idle(void)
@@ -229,6 +231,14 @@ void Keyboard(unsigned char key, int x, int y)
 				glEnable(GL_LIGHT1);
 			else
 				glDisable(GL_LIGHT1);
+			break;
+		case 't':
+		case 'T':
+			test_light = !test_light;
+			if (test_light)
+				glEnable(GL_LIGHT0);
+			else
+				glDisable(GL_LIGHT0);
 			break;
 		case 27: //ESC
 			if (build_from_file)
@@ -367,4 +377,16 @@ void DrawWall(GLfloat x, GLfloat z){
 		glEnd();
 	glPopMatrix();
 	return;
+}
+
+void Material(void)
+{
+	GLfloat material_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
+	GLfloat material_diffuse[] = { 0.4, 0.4, 0.4, 1.0 };
+	GLfloat material_specular[] = { 0.7, 0.7, 0.7, 1.0 };
+
+	glMaterialfv(GL_FRONT, GL_AMBIENT, material_ambient);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, material_diffuse);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, material_specular);
+	glMaterialf(GL_FRONT, GL_SHININESS, 0.6 * 128.0);
 }
