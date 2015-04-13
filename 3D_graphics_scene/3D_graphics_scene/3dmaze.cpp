@@ -29,7 +29,9 @@ GLfloat spot_direction[] = { 0.0, 0.0, -1.0 };
 int old_mouse_pos[2] = { window_size[0] >> 1, window_size[1] >> 1 };
 
 /* Maze */
-Wall **Map;
+bool build_from_file = true;
+int **map;
+int map_w, map_h;
 
 void DrawWall(GLfloat x, GLfloat z){
 
@@ -90,6 +92,46 @@ int main(int argc, char *argv[])
 
 void Init(void)
 {
+	if (build_from_file)
+	{
+		FILE *stream;
+		char mode;
+
+		errno_t err = fopen_s(&stream, "Map.txt", "r");
+		fseek(stream, 0L, SEEK_SET);
+
+		fscanf_s(stream, "%d %d\r\n", &map_w, &map_h);
+		map = (int**)malloc(sizeof(int*)*map_h);
+		for (int i = 0; i < map_h; ++i)
+			map[i] = (int*)malloc(sizeof(int)*map_w);
+		
+		for (int i = 0; i < map_h; ++i)
+		{
+			for (int j = 0; j < map_w; ++j)
+			{
+				fscanf_s(stream, " %c ", &mode);
+				switch (mode)
+				{
+					case 'w':
+						map[i][j] = Map_Wall;
+						break;
+					case 'r':
+						map[i][j] = Map_Road;
+						break;
+					case 's':
+						map[i][j] = Map_Start;
+						break;
+					case 'e':
+						map[i][j] = Map_End;
+						break;
+				}
+				printf("%c", mode);
+			}
+			printf("\n");
+		}
+		fclose(stream);
+	}
+
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 
 	glEnable(GL_LIGHTING);
@@ -170,7 +212,7 @@ void Keyboard(unsigned char key, int x, int y)
 			break;
 		case 'l':
 		case 'L':
-			flash_light = ~flash_light;
+			flash_light = !flash_light;
 			if (flash_light)
 				glEnable(GL_LIGHT1);
 			else
@@ -178,13 +220,19 @@ void Keyboard(unsigned char key, int x, int y)
 			break;
 		case 't':
 		case 'T':
-			test_light = ~test_light;
+			test_light = !test_light;
 			if (flash_light)
 				glEnable(GL_LIGHT0);
 			else
 				glDisable(GL_LIGHT0);
 			break;
 		case 27: //ESC
+			if (build_from_file)
+			{
+				for (int i = 0; i < map_h; ++i)
+					free(map[i]);
+				free(map);
+			}
 			exit(0);
 			break;
 	}
