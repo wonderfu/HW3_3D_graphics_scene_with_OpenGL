@@ -33,40 +33,108 @@ bool build_from_file = true;
 int **map;
 int map_w, map_h;
 
+GLubyte mipmapImage32[32][32][4];
+static GLuint texName;
+
+void drawtexture(void){
+	int i, j;
+	int line = 4;
+	int half_line = 2;
+
+	for (i = 0; i < 32; i++) {
+		for (j = 0; j < 32; j++) {
+			mipmapImage32[i][j][0] = 128;
+			mipmapImage32[i][j][1] = 128;
+			mipmapImage32[i][j][2] = 128;
+			mipmapImage32[i][j][3] = 255;
+		}
+	}
+
+	for (i = half_line; i < 16 - half_line; ++i)
+	{
+		for (j = half_line; j < 32 - half_line; ++j)
+		{
+			mipmapImage32[i][j][0] = 255;
+			mipmapImage32[i][j][1] = 0;
+			mipmapImage32[i][j][2] = 0;
+		}
+	}
+	for (i = 16 + half_line; i < 32 - half_line; ++i)
+	{
+		for (j = 0; j < 16 - half_line; ++j)
+		{
+			mipmapImage32[i][j][0] = 255;
+			mipmapImage32[i][j][1] = 0;
+			mipmapImage32[i][j][2] = 0;
+		}
+		for (j = 16 + half_line; j < 32; ++j)
+		{
+			mipmapImage32[i][j][0] = 255;
+			mipmapImage32[i][j][1] = 0;
+			mipmapImage32[i][j][2] = 0;
+		}
+	}
+
+
+	/*
+	for (i = 0; i < 32; i++) {
+	for (j = 0; j < 32; j++) {
+
+	mipmapImage32[i][j][0] = 255;
+	if (i == 0 || i == 15 || i == 16 || i == 31)
+	mipmapImage32[i][j][0] = 0;
+	else if (i<15 && (j == 0 || j == 31))
+	mipmapImage32[i][j][0] = 0;
+	else if (i>16 && (j == 15 || j == 16))
+	mipmapImage32[i][j][0] = 0;
+	mipmapImage32[i][j][1] = 0;
+	mipmapImage32[i][j][2] = 0;
+	mipmapImage32[i][j][3] = 0;
+	}
+	}
+	*/
+}
+
+
 void DrawWall(GLfloat x, GLfloat z){
 	GLfloat width = Wall_W / 2;
 
 	glPushMatrix();
 		glTranslatef(x, 0, z);
 	
+		glBindTexture(GL_TEXTURE_2D, texName);
+		glEnable(GL_TEXTURE_2D);
+
 		glBegin(GL_QUADS);
 			glColor3f(1.0f, 0.0f, 0.0f);         // Red
 			glNormal3f(0.0f, 0.0f, 1.0f);
-			glVertex3f( width,  Wall_H, width);
-			glVertex3f(-width,  Wall_H, width);
-			glVertex3f(-width, -Wall_H, width);
-			glVertex3f( width, -Wall_H, width);
+			glTexCoord2f(1.0, 0.0); glVertex3f(width, Wall_H, width);
+			glTexCoord2f(0.0, 0.0); glVertex3f(-width, Wall_H, width);
+			glTexCoord2f(0.0, 1.0); (-width, -Wall_H, width);
+			glTexCoord2f(1.0, 1.0); (width, -Wall_H, width);
+			glEnd();
 
+			glBegin(GL_QUADS);
 			glColor3f(0.0f, 0.0f, 1.0f);         // Blue
 			glNormal3f(-1.0f, 0.0f, 0.0f);
-			glVertex3f(-width,  Wall_H,  width);
-			glVertex3f(-width,  Wall_H, -width);
-			glVertex3f(-width, -Wall_H, -width);
-			glVertex3f(-width, -Wall_H,  width);
+			glTexCoord2f(1.0, 0.0); glVertex3f(-width, Wall_H, width);
+			glTexCoord2f(0.0, 0.0); glVertex3f(-width, Wall_H, -width);
+			glTexCoord2f(0.0, 1.0); glVertex3f(-width, -Wall_H, -width);
+			glTexCoord2f(1.0, 1.0); glVertex3f(-width, -Wall_H, width);
 
 			glColor3f(1.0f, 0.0f, 1.0f);         // Magenta
 			glNormal3f(0.0f, 0.0f, -1.0f);
-			glVertex3f(-width,  Wall_H, -width);
-			glVertex3f( width,  Wall_H, -width);
-			glVertex3f( width, -Wall_H, -width);
-			glVertex3f(-width, -Wall_H, -width);
+			glTexCoord2f(1.0, 0.0); glVertex3f(-width, Wall_H, -width);
+			glTexCoord2f(0.0, 0.0); glVertex3f(width, Wall_H, -width);
+			glTexCoord2f(0.0, 1.0); glVertex3f(width, -Wall_H, -width);
+			glTexCoord2f(1.0, 1.0); glVertex3f(-width, -Wall_H, -width);
 
 			glColor3f(0.0f, 1.0f, 1.0f);         // Cyan
 			glNormal3f(1.0f, 0.0f, 0.0f);
-			glVertex3f(width,  Wall_H, -width);
-			glVertex3f(width,  Wall_H,  width);
-			glVertex3f(width, -Wall_H,  width);
-			glVertex3f(width, -Wall_H, -width);
+			glTexCoord2f(1.0, 0.0); glVertex3f(width, Wall_H, -width);
+			glTexCoord2f(0.0, 0.0); glVertex3f(width, Wall_H, width);
+			glTexCoord2f(0.0, 1.0); glVertex3f(width, -Wall_H, width);
+			glTexCoord2f(1.0, 1.0); glVertex3f(width, -Wall_H, -width);
 		glEnd();
 	glPopMatrix();
 	return;
@@ -152,6 +220,17 @@ void Init(void)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(60.0, (GLfloat)window_size[0] / (GLfloat)window_size[1], 1.0, 100.0);
+
+
+
+	glGenTextures(1, &texName);
+	glBindTexture(GL_TEXTURE_2D, texName);
+	drawtexture();
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 32, 32, 0, GL_RGBA, GL_UNSIGNED_BYTE, mipmapImage32);
 }
 
 void Display(void)
