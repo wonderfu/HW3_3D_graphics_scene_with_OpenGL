@@ -11,7 +11,7 @@
 #define PI2 6.28318530718
 #define MoveSpeed 0.5
 #define Wall_H 10.0f
-#define Wall_W 1.0f
+#define Wall_W 20.0f
 #define Ceil_Floor 5.0f
 #define N 0
 #define E 1
