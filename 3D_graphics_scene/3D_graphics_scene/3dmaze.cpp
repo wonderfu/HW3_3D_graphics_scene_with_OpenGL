@@ -85,6 +85,8 @@ void Init(void)
 						break;
 					case 's':
 						map[i][j] = Map_Start;
+						camera_eye[0] = (map_h / 2 - i)*Wall_W;
+						camera_eye[2] = (map_w / 2 - j)*Wall_W;
 						break;
 					case 'e':
 						map[i][j] = Map_End;
