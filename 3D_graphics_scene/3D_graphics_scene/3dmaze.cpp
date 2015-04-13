@@ -36,92 +36,6 @@ int map_w, map_h;
 GLubyte mipmapImage32[32][32][4];
 static GLuint texName;
 
-void drawtexture(void){
-	int i, j;
-	int line = 4;
-	int half_line = 2;
-
-	for (i = 0; i < 32; i++) {
-		for (j = 0; j < 32; j++) {
-			mipmapImage32[i][j][0] = 128;
-			mipmapImage32[i][j][1] = 128;
-			mipmapImage32[i][j][2] = 128;
-			mipmapImage32[i][j][3] = 255;
-		}
-	}
-
-	for (i = half_line; i < 16 - half_line; ++i)
-	{
-		for (j = half_line; j < 32 - half_line; ++j)
-		{
-			mipmapImage32[i][j][0] = 255;
-			mipmapImage32[i][j][1] = 0;
-			mipmapImage32[i][j][2] = 0;
-		}
-	}
-	for (i = 16 + half_line; i < 32 - half_line; ++i)
-	{
-		for (j = 0; j < 16 - half_line; ++j)
-		{
-			mipmapImage32[i][j][0] = 255;
-			mipmapImage32[i][j][1] = 0;
-			mipmapImage32[i][j][2] = 0;
-		}
-		for (j = 16 + half_line; j < 32; ++j)
-		{
-			mipmapImage32[i][j][0] = 255;
-			mipmapImage32[i][j][1] = 0;
-			mipmapImage32[i][j][2] = 0;
-		}
-	}
-}
-
-
-void DrawWall(GLfloat x, GLfloat z){
-	GLfloat width = Wall_W / 2;
-
-	glPushMatrix();
-		glTranslatef(x, 0, z);
-	
-		glBindTexture(GL_TEXTURE_2D, texName);
-		glEnable(GL_TEXTURE_2D);
-
-		glColor3f(1.0f, 0.0f, 0.0f);
-		glBegin(GL_QUADS);
-			glNormal3f(0.0f, 0.0f, 1.0f);
-			glTexCoord2f(10.0,  0.0); glVertex3f(width, Wall_H, width);
-			glTexCoord2f( 0.0,  0.0); glVertex3f(-width, Wall_H, width);
-			glTexCoord2f( 0.0, 10.0); glVertex3f(-width, -Wall_H, width);
-			glTexCoord2f(10.0, 10.0); glVertex3f(width, -Wall_H, width);
-		glEnd();
-
-		glBegin(GL_QUADS);
-			glNormal3f(-1.0f, 0.0f, 0.0f);
-			glTexCoord2f(10.0,  0.0); glVertex3f(-width, Wall_H, width);
-			glTexCoord2f( 0.0,  0.0); glVertex3f(-width, Wall_H, -width);
-			glTexCoord2f( 0.0, 10.0); glVertex3f(-width, -Wall_H, -width);
-			glTexCoord2f(10.0, 10.0); glVertex3f(-width, -Wall_H, width);
-		glEnd();
-
-		glBegin(GL_QUADS);
-			glNormal3f(0.0f, 0.0f, -1.0f);
-			glTexCoord2f(10.0,  0.0); glVertex3f(-width, Wall_H, -width);
-			glTexCoord2f( 0.0,  0.0); glVertex3f(width, Wall_H, -width);
-			glTexCoord2f( 0.0, 10.0); glVertex3f(width, -Wall_H, -width);
-			glTexCoord2f(10.0, 10.0); glVertex3f(-width, -Wall_H, -width);
-		glEnd();
-
-		glBegin(GL_QUADS);
-			glNormal3f(1.0f, 0.0f, 0.0f);
-			glTexCoord2f(10.0,  0.0); glVertex3f(width, Wall_H, -width);
-			glTexCoord2f( 0.0,  0.0); glVertex3f(width, Wall_H, width);
-			glTexCoord2f( 0.0, 10.0); glVertex3f(width, -Wall_H, width);
-			glTexCoord2f(10.0, 10.0); glVertex3f(width, -Wall_H, -width);
-		glEnd();
-	glPopMatrix();
-	return;
-}
-
 int main(int argc, char *argv[])
 {
 	glutInit(&argc, argv);
@@ -203,11 +117,9 @@ void Init(void)
 	glLoadIdentity();
 	gluPerspective(60.0, (GLfloat)window_size[0] / (GLfloat)window_size[1], 1.0, 100.0);
 
-
-
+	DrawTexture();
 	glGenTextures(1, &texName);
 	glBindTexture(GL_TEXTURE_2D, texName);
-	drawtexture();
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -369,4 +281,91 @@ void LightSource(void)
 		glLightfv(GL_LIGHT0, GL_SPECULAR, light0_specular);
 		glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
 	}
+}
+
+void DrawTexture(void)
+{
+	int i, j;
+	int half_line = 2;
+
+	for (i = 0; i < 32; i++) 
+	{
+		for (j = 0; j < 32; j++) 
+		{
+			mipmapImage32[i][j][0] = 128;
+			mipmapImage32[i][j][1] = 128;
+			mipmapImage32[i][j][2] = 128;
+			mipmapImage32[i][j][3] = 255;
+		}
+	}
+
+	for (i = half_line; i < 16 - half_line; ++i)
+	{
+		for (j = half_line; j < 32 - half_line; ++j)
+		{
+			mipmapImage32[i][j][0] = 255;
+			mipmapImage32[i][j][1] = 0;
+			mipmapImage32[i][j][2] = 0;
+		}
+	}
+	for (i = 16 + half_line; i < 32 - half_line; ++i)
+	{
+		for (j = 0; j < 16 - half_line; ++j)
+		{
+			mipmapImage32[i][j][0] = 255;
+			mipmapImage32[i][j][1] = 0;
+			mipmapImage32[i][j][2] = 0;
+		}
+		for (j = 16 + half_line; j < 32; ++j)
+		{
+			mipmapImage32[i][j][0] = 255;
+			mipmapImage32[i][j][1] = 0;
+			mipmapImage32[i][j][2] = 0;
+		}
+	}
+}
+
+void DrawWall(GLfloat x, GLfloat z){
+	GLfloat width = Wall_W / 2;
+
+	glPushMatrix();
+	glTranslatef(x, 0, z);
+
+	glBindTexture(GL_TEXTURE_2D, texName);
+	glEnable(GL_TEXTURE_2D);
+
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glBegin(GL_QUADS);
+	glNormal3f(0.0f, 0.0f, 1.0f);
+	glTexCoord2f(10.0, 0.0); glVertex3f(width, Wall_H, width);
+	glTexCoord2f(0.0, 0.0); glVertex3f(-width, Wall_H, width);
+	glTexCoord2f(0.0, 10.0); glVertex3f(-width, -Wall_H, width);
+	glTexCoord2f(10.0, 10.0); glVertex3f(width, -Wall_H, width);
+	glEnd();
+
+	glBegin(GL_QUADS);
+	glNormal3f(-1.0f, 0.0f, 0.0f);
+	glTexCoord2f(10.0, 0.0); glVertex3f(-width, Wall_H, width);
+	glTexCoord2f(0.0, 0.0); glVertex3f(-width, Wall_H, -width);
+	glTexCoord2f(0.0, 10.0); glVertex3f(-width, -Wall_H, -width);
+	glTexCoord2f(10.0, 10.0); glVertex3f(-width, -Wall_H, width);
+	glEnd();
+
+	glBegin(GL_QUADS);
+	glNormal3f(0.0f, 0.0f, -1.0f);
+	glTexCoord2f(10.0, 0.0); glVertex3f(-width, Wall_H, -width);
+	glTexCoord2f(0.0, 0.0); glVertex3f(width, Wall_H, -width);
+	glTexCoord2f(0.0, 10.0); glVertex3f(width, -Wall_H, -width);
+	glTexCoord2f(10.0, 10.0); glVertex3f(-width, -Wall_H, -width);
+	glEnd();
+
+	glBegin(GL_QUADS);
+	glNormal3f(1.0f, 0.0f, 0.0f);
+	glTexCoord2f(10.0, 0.0); glVertex3f(width, Wall_H, -width);
+	glTexCoord2f(0.0, 0.0); glVertex3f(width, Wall_H, width);
+	glTexCoord2f(0.0, 10.0); glVertex3f(width, -Wall_H, width);
+	glTexCoord2f(10.0, 10.0); glVertex3f(width, -Wall_H, -width);
+	glEnd();
+	glPopMatrix();
+	return;
 }
