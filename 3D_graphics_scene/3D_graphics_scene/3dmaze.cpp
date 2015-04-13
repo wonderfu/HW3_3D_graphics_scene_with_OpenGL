@@ -12,14 +12,14 @@ GLdouble camera_ray[3] = { 0.0, 0.0, -1.0 }; // eye & angle & ray decide center
 
 /* Light0 */
 bool test_light = true;
-GLfloat light0_ambient[] = { 0.3, 0.3, 0.3, 1.0 };
+GLfloat light0_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
 GLfloat light0_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
 GLfloat light0_specular[] = { 1.0, 1.0, 1.0, 1.0 };
 GLfloat light0_position[] = { 0.0, 30.0, 0.0, 1.0 };
 
 /* Light1 */
 bool flash_light = true;
-GLfloat light1_ambient[] = { 0.3, 0.3, 0.3, 1.0 };
+GLfloat light1_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
 GLfloat light1_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
 GLfloat light1_specular[] = { 1.0, 1.0, 1.0, 1.0 };
 GLfloat light1_position[] = { 0.0, 0.0, 20.0, 1.0 };
@@ -57,6 +57,7 @@ int main(int argc, char *argv[])
 
 void Init(void)
 {
+	// map file
 	if (build_from_file)
 	{
 		FILE *stream;
@@ -100,7 +101,7 @@ void Init(void)
 	}
 
 	glClearColor(0.0, 0.0, 0.0, 1.0);
-
+	// light
 	glEnable(GL_LIGHTING);
 	glEnable(GL_BLEND);
 	glEnable(GL_COLOR_MATERIAL);
@@ -112,13 +113,13 @@ void Init(void)
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 	glClearDepth(1.0);
-
+	// mouse
 	glutSetCursor(GLUT_CURSOR_NONE);
-
+	// camera
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(60.0, (GLfloat)window_size[0] / (GLfloat)window_size[1], 1.0, 10000.0);
-
+	// texture
 	DrawTexture();
 	glGenTextures(1, &texName);
 	glBindTexture(GL_TEXTURE_2D, texName);
@@ -131,8 +132,6 @@ void Init(void)
 
 void Display(void)
 {
-	int i, j, hh = map_h / 2, hw = map_w / 2;
-
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -153,30 +152,31 @@ void Display(void)
 	floor_half_h = map_h*Wall_W / 2;
 
 	glPushMatrix();
-	glColor3f(0.5f, 0.5f, 0.5f);
-	glBegin(GL_QUADS);
-	// ceil
-	glNormal3f(0.0f, -1.0f, 0.0f);
-	glVertex3f(floor_half_w, Wall_H, floor_half_h);
-	glVertex3f(-floor_half_w, Wall_H, floor_half_h);
-	glVertex3f(-floor_half_w, Wall_H, -floor_half_h);
-	glVertex3f(floor_half_w, Wall_H, -floor_half_h);
-	// floor
-	glNormal3f(0.0f, 1.0f, 0.0f);
-	glVertex3f(floor_half_w, -Wall_H, floor_half_h);
-	glVertex3f(floor_half_w, -Wall_H, -floor_half_h);
-	glVertex3f(-floor_half_w, -Wall_H, -floor_half_h);
-	glVertex3f(-floor_half_w, -Wall_H, floor_half_h);
-	glEnd();
+		glColor3f(0.5f, 0.5f, 0.5f);
+		glBegin(GL_QUADS);
+			// ceil
+			glNormal3f(0.0f, -1.0f, 0.0f);
+			glVertex3f(floor_half_w + Wall_W / 2, Wall_H, floor_half_h + Wall_W / 2);
+			glVertex3f(-floor_half_w + Wall_W / 2, Wall_H, floor_half_h + Wall_W / 2);
+			glVertex3f(-floor_half_w + Wall_W / 2, Wall_H, -floor_half_h + Wall_W / 2);
+			glVertex3f(floor_half_w + Wall_W / 2, Wall_H, -floor_half_h + Wall_W / 2);
+			// floor
+			glNormal3f(0.0f, 1.0f, 0.0f);
+			glVertex3f(floor_half_w + Wall_W / 2, -Wall_H, floor_half_h + Wall_W / 2);
+			glVertex3f(floor_half_w + Wall_W / 2, -Wall_H, -floor_half_h + Wall_W / 2);
+			glVertex3f(-floor_half_w + Wall_W / 2, -Wall_H, -floor_half_h + Wall_W / 2);
+			glVertex3f(-floor_half_w + Wall_W / 2, -Wall_H, floor_half_h + Wall_W / 2);
+		glEnd();
 	glPopMatrix();
+	// wall
+	int map_half_h = map_h / 2, map_half_w = map_w / 2;
 
-
-	for (i = 0; i < map_h; i++){
-		for (j = 0; j < map_w; j++){
-			if (map[i][j] == Map_Wall){
-				DrawWall((hh - i)*Wall_W, (hw-j)*Wall_W);
-			
-			}
+	for (int i = 0; i < map_h; ++i)
+	{
+		for (int j = 0; j < map_w; ++j)
+		{
+			if (map[i][j] == Map_Wall)
+				DrawWall((map_half_h - i)*Wall_W, (map_half_w - j)*Wall_W);
 		}
 	}
 }
@@ -334,43 +334,37 @@ void DrawWall(GLfloat x, GLfloat z){
 	GLfloat width = Wall_W / 2;
 
 	glPushMatrix();
-	glTranslatef(x, 0, z);
+		glTranslatef(x, 0, z);
 
-	glBindTexture(GL_TEXTURE_2D, texName);
-	glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, texName);
+		glEnable(GL_TEXTURE_2D);
 
-	glColor3f(1.0f, 0.0f, 0.0f);
-	glBegin(GL_QUADS);
-	glNormal3f(0.0f, 0.0f, 1.0f);
-	glTexCoord2f(10.0, 0.0); glVertex3f(width, Wall_H, width);
-	glTexCoord2f(0.0, 0.0); glVertex3f(-width, Wall_H, width);
-	glTexCoord2f(0.0, 10.0); glVertex3f(-width, -Wall_H, width);
-	glTexCoord2f(10.0, 10.0); glVertex3f(width, -Wall_H, width);
-	glEnd();
+		glColor3f(1.0f, 0.0f, 0.0f);
+		glBegin(GL_QUADS);
+			glNormal3f(0.0f, 0.0f, 1.0f);
+			glTexCoord2f(10.0, 0.0); glVertex3f(width, Wall_H, width);
+			glTexCoord2f(0.0, 0.0); glVertex3f(-width, Wall_H, width);
+			glTexCoord2f(0.0, 10.0); glVertex3f(-width, -Wall_H, width);
+			glTexCoord2f(10.0, 10.0); glVertex3f(width, -Wall_H, width);
 
-	glBegin(GL_QUADS);
-	glNormal3f(-1.0f, 0.0f, 0.0f);
-	glTexCoord2f(10.0, 0.0); glVertex3f(-width, Wall_H, width);
-	glTexCoord2f(0.0, 0.0); glVertex3f(-width, Wall_H, -width);
-	glTexCoord2f(0.0, 10.0); glVertex3f(-width, -Wall_H, -width);
-	glTexCoord2f(10.0, 10.0); glVertex3f(-width, -Wall_H, width);
-	glEnd();
+			glNormal3f(-1.0f, 0.0f, 0.0f);
+			glTexCoord2f(10.0, 0.0); glVertex3f(-width, Wall_H, width);
+			glTexCoord2f(0.0, 0.0); glVertex3f(-width, Wall_H, -width);
+			glTexCoord2f(0.0, 10.0); glVertex3f(-width, -Wall_H, -width);
+			glTexCoord2f(10.0, 10.0); glVertex3f(-width, -Wall_H, width);
 
-	glBegin(GL_QUADS);
-	glNormal3f(0.0f, 0.0f, -1.0f);
-	glTexCoord2f(10.0, 0.0); glVertex3f(-width, Wall_H, -width);
-	glTexCoord2f(0.0, 0.0); glVertex3f(width, Wall_H, -width);
-	glTexCoord2f(0.0, 10.0); glVertex3f(width, -Wall_H, -width);
-	glTexCoord2f(10.0, 10.0); glVertex3f(-width, -Wall_H, -width);
-	glEnd();
+			glNormal3f(0.0f, 0.0f, -1.0f);
+			glTexCoord2f(10.0, 0.0); glVertex3f(-width, Wall_H, -width);
+			glTexCoord2f(0.0, 0.0); glVertex3f(width, Wall_H, -width);
+			glTexCoord2f(0.0, 10.0); glVertex3f(width, -Wall_H, -width);
+			glTexCoord2f(10.0, 10.0); glVertex3f(-width, -Wall_H, -width);
 
-	glBegin(GL_QUADS);
-	glNormal3f(1.0f, 0.0f, 0.0f);
-	glTexCoord2f(10.0, 0.0); glVertex3f(width, Wall_H, -width);
-	glTexCoord2f(0.0, 0.0); glVertex3f(width, Wall_H, width);
-	glTexCoord2f(0.0, 10.0); glVertex3f(width, -Wall_H, width);
-	glTexCoord2f(10.0, 10.0); glVertex3f(width, -Wall_H, -width);
-	glEnd();
+			glNormal3f(1.0f, 0.0f, 0.0f);
+			glTexCoord2f(10.0, 0.0); glVertex3f(width, Wall_H, -width);
+			glTexCoord2f(0.0, 0.0); glVertex3f(width, Wall_H, width);
+			glTexCoord2f(0.0, 10.0); glVertex3f(width, -Wall_H, width);
+			glTexCoord2f(10.0, 10.0); glVertex3f(width, -Wall_H, -width);
+		glEnd();
 	glPopMatrix();
 	return;
 }
