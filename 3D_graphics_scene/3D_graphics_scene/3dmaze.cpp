@@ -131,6 +131,8 @@ void Init(void)
 
 void Display(void)
 {
+	int i, j, hh = map_h / 2, hw = map_w / 2;
+
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -140,35 +142,43 @@ void Display(void)
 	camera_center[1] = camera_eye[1] + camera_ray[1];
 	camera_center[2] = camera_eye[2] + camera_ray[2];
 	gluLookAt(camera_eye[0], camera_eye[1], camera_eye[2], camera_center[0], camera_center[1], camera_center[2], camera_up[0], camera_up[1], camera_up[2]);
-	
+
 	/* Light */
 	LightSource();
 
 	/* Maze */
 	GLfloat floor_half_w, floor_half_h;
 
-	floor_half_w = map_w*Wall_W/2;
-	floor_half_h = map_h*Wall_W/2;
+	floor_half_w = map_w*Wall_W / 2;
+	floor_half_h = map_h*Wall_W / 2;
 
 	glPushMatrix();
-		glColor3f(0.5f, 0.5f, 0.5f);
-		glBegin(GL_QUADS);
-			// ceil
-			glNormal3f(0.0f, -1.0f, 0.0f);
-			glVertex3f( floor_half_w, Wall_H,  floor_half_h);
-			glVertex3f(-floor_half_w, Wall_H,  floor_half_h);
-			glVertex3f(-floor_half_w, Wall_H, -floor_half_h);
-			glVertex3f( floor_half_w, Wall_H, -floor_half_h);
-			//floor
-			glNormal3f(0.0f, 1.0f, 0.0f);
-			glVertex3f( floor_half_w, -Wall_H,  floor_half_h);
-			glVertex3f( floor_half_w, -Wall_H, -floor_half_h);
-			glVertex3f(-floor_half_w, -Wall_H, -floor_half_h);
-			glVertex3f(-floor_half_w, -Wall_H, floor_half_h);
-		glEnd();
+	glColor3f(0.5f, 0.5f, 0.5f);
+	glBegin(GL_QUADS);
+	// ceil
+	glNormal3f(0.0f, -1.0f, 0.0f);
+	glVertex3f(floor_half_w, Wall_H, floor_half_h);
+	glVertex3f(-floor_half_w, Wall_H, floor_half_h);
+	glVertex3f(-floor_half_w, Wall_H, -floor_half_h);
+	glVertex3f(floor_half_w, Wall_H, -floor_half_h);
+	//floor
+	glNormal3f(0.0f, 1.0f, 0.0f);
+	glVertex3f(floor_half_w, -Wall_H, floor_half_h);
+	glVertex3f(floor_half_w, -Wall_H, -floor_half_h);
+	glVertex3f(-floor_half_w, -Wall_H, -floor_half_h);
+	glVertex3f(-floor_half_w, -Wall_H, floor_half_h);
+	glEnd();
 	glPopMatrix();
-	
-	DrawWall(0.0, 0.0);
+
+
+	for (i = 0; i < map_h; i++){
+		for (j = 0; j < map_w; j++){
+			if (map[i][j] == Map_Wall){
+				DrawWall((hh - i)*Wall_W, (hw-j)*Wall_W);
+			
+			}
+		}
+	}
 }
 
 void Idle(void)
