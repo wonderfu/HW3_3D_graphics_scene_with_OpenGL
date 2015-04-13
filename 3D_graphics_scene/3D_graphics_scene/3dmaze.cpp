@@ -12,14 +12,14 @@ GLdouble camera_ray[3] = { 0.0, 0.0, -1.0 }; // eye & angle & ray decide center
 
 /* Light0 */
 bool test_light = true;
-GLfloat light0_ambient[] = { 1.0, 1.0, 1.0, 1.0 };
+GLfloat light0_ambient[] = { 0.3, 0.3, 0.3, 1.0 };
 GLfloat light0_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
 GLfloat light0_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-GLfloat light0_position[] = { 0.0, 10.0, 0.0, 1.0 };
+GLfloat light0_position[] = { 5.0, 5.0, 5.0, 1.0 };
 
 /* Light1 */
 bool flash_light = true;
-GLfloat light1_ambient[] = { 1.0, 1.0, 1.0, 1.0 };
+GLfloat light1_ambient[] = { 0.3, 0.3, 0.3, 1.0 };
 GLfloat light1_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
 GLfloat light1_specular[] = { 1.0, 1.0, 1.0, 1.0 };
 GLfloat light1_position[] = { 0.0, 0.0, 20.0, 1.0 };
@@ -31,41 +31,39 @@ int old_mouse_pos[2] = { window_size[0] >> 1, window_size[1] >> 1 };
 /* Maze */
 Wall **Map;
 
-void drawwall(GLfloat x, GLfloat y){
+void DrawWall(GLfloat x, GLfloat z){
 
 	glPushMatrix();
-		glTranslatef(x, y, 0);
+		glTranslatef(x, 0, z);
 	
-		glBegin(GL_POLYGON);
+		glBegin(GL_QUADS);
 			glColor3f(1.0f, 0.0f, 0.0f);         // Red
-			glVertex3f(0.5f, 5.0f, 0.5f);
-			glVertex3f(-0.5f, 5.0f, 0.5f);
-			glVertex3f(-0.5f, 0.0f, 0.5f);
-			glVertex3f(0.5f, 0.0f, 0.5f);
-		glEnd();
-	
-		glBegin(GL_POLYGON);
+			glNormal3f(0.0f, 0.0f, 1.0f);
+			glVertex3f( Wall_W,  Wall_H, Wall_W);
+			glVertex3f(-Wall_W,  Wall_H, Wall_W);
+			glVertex3f(-Wall_W, -Wall_H, Wall_W);
+			glVertex3f( Wall_W, -Wall_H, Wall_W);
+
 			glColor3f(0.0f, 0.0f, 1.0f);         // Blue
-			glVertex3f(-0.5f, 5.0f, 0.5f);
-			glVertex3f(-0.5f, 5.0f, -0.5f);
-			glVertex3f(-0.5f, 0.0f, -0.5f);
-			glVertex3f(-0.5f, 0.0f, 0.5f);
-		glEnd();
-	
-		glBegin(GL_POLYGON);
+			glNormal3f(-1.0f, 0.0f, 0.0f);
+			glVertex3f(-Wall_W,  Wall_H,  Wall_W);
+			glVertex3f(-Wall_W,  Wall_H, -Wall_W);
+			glVertex3f(-Wall_W, -Wall_H, -Wall_W);
+			glVertex3f(-Wall_W, -Wall_H,  Wall_W);
+
 			glColor3f(1.0f, 0.0f, 1.0f);         // Magenta
-			glVertex3f(-0.5f, 5.0f, -0.5f);
-			glVertex3f(0.5f, 5.0f, -0.5f);
-			glVertex3f(0.5f, 0.0f, -0.5f);
-			glVertex3f(-0.5f, 0.0f, -0.5f);
-		glEnd();
-	
-		glBegin(GL_POLYGON);
+			glNormal3f(0.0f, 0.0f, -1.0f);
+			glVertex3f(-Wall_W,  Wall_H, -Wall_W);
+			glVertex3f( Wall_W,  Wall_H, -Wall_W);
+			glVertex3f( Wall_W, -Wall_H, -Wall_W);
+			glVertex3f(-Wall_W, -Wall_H, -Wall_W);
+
 			glColor3f(0.0f, 1.0f, 1.0f);         // Cyan
-			glVertex3f(0.5f, 5.0f, -0.5f);
-			glVertex3f(0.5f, 5.0f, 0.5f);
-			glVertex3f(0.5f, 0.0f, 0.5f);
-			glVertex3f(0.5f, 0.0f, -0.5f);
+			glNormal3f(1.0f, 0.0f, 0.0f);
+			glVertex3f(Wall_W,  Wall_H, -Wall_W);
+			glVertex3f(Wall_W,  Wall_H,  Wall_W);
+			glVertex3f(Wall_W, -Wall_H,  Wall_W);
+			glVertex3f(Wall_W, -Wall_H, -Wall_W);
 		glEnd();
 	glPopMatrix();
 	return;
@@ -126,7 +124,7 @@ void Display(void)
 
 	LightSource();
 
-	drawwall(0.0, 0.0);
+	DrawWall(0.0, 0.0);
 }
 
 void Idle(void)
@@ -209,6 +207,13 @@ void LightSource(void)
 {
 	if (flash_light)
 	{
+		light1_position[0] = camera_eye[0];
+		light1_position[1] = camera_eye[1];
+		light1_position[2] = camera_eye[2];
+		spot_direction[0] = camera_ray[0];
+		//spot_direction[1] = camera_ray[1];
+		spot_direction[2] = camera_ray[2];
+
 		glLightfv(GL_LIGHT1, GL_AMBIENT, light1_ambient);
 		glLightfv(GL_LIGHT1, GL_DIFFUSE, light1_diffuse);
 		glLightfv(GL_LIGHT1, GL_SPECULAR, light1_specular);

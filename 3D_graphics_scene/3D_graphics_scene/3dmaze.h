@@ -13,6 +13,9 @@
 #define S 2
 #define W 3
 #define MoveSpeed 0.5
+#define Wall_H 10.0f
+#define Wall_W 1.0f
+
 
 /* Struct */
 typedef struct Wall {
@@ -29,6 +32,6 @@ void Keyboard(unsigned char, int, int);
 void Mouse(int, int, int, int);
 void Motion(int, int);
 void LightSource(void);
-void drawwall(GLfloat, GLfloat);
+void DrawWall(GLfloat, GLfloat);
 
 #endif
