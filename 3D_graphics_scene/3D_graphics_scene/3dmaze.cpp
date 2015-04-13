@@ -27,6 +27,11 @@ GLfloat spot_direction[] = { 0.0, 0.0, -1.0 };
 
 /* Mouse */
 int old_mouse_pos[2] = { window_size[0] >> 1, window_size[1] >> 1 };
+int bullet_dis = 0;
+GLdouble radious = 0.2;
+GLdouble bullet_ray[3] = { 0.0, 0.0, 0.0 };
+GLdouble bullet_pos[3] = { 0.0, 0.0, 0.0 };
+GLdouble gravity = -0.005;
 
 /* Maze */
 bool build_from_file = true;
@@ -180,6 +185,20 @@ void Display(void)
 				DrawWall((map_half_h - i)*Wall_W, (map_half_w - j)*Wall_W);
 		}
 	}
+
+	if (bullet_dis > 0)
+	{
+		bullet_pos[0] += bullet_ray[0] * 0.5;
+		bullet_pos[1] += bullet_ray[1] * 0.5;
+		bullet_pos[2] += bullet_ray[2] * 0.5;
+		bullet_ray[1] += gravity;
+		glPushMatrix();
+			glTranslatef(bullet_pos[0], bullet_pos[1], bullet_pos[2]);
+			glColor3f(0.0, 1.0, 0.0);
+			glutSolidSphere(radious, 20, 20);
+		glPopMatrix();
+		--bullet_dis;
+	}
 	glFlush();
 }
 
@@ -254,7 +273,13 @@ void Keyboard(unsigned char key, int x, int y)
 
 void Mouse(int button, int state, int x, int y)
 {
-
+	bullet_pos[0] = camera_eye[0];
+	bullet_pos[1] = -1;
+	bullet_pos[2] = camera_eye[2];
+	bullet_ray[0] = camera_ray[0];
+	bullet_ray[1] = +0.1;
+	bullet_ray[2] = camera_ray[2];
+	bullet_dis = 100;
 }
 
 void Motion(int x, int y)
