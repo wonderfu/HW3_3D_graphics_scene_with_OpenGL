@@ -1,19 +1,17 @@
 #include "3dmaze.h"
 
 /*window*/
-int window_size[2] = { 800, 800 };
+int window_size[2] = { 800, 800 }; // W H
 
 /* camera */
 GLdouble camera_eye[3] = { 0.0, 0.0, 20.0 };
 GLdouble camera_center[3] = { 0.0, 0.0, 0.0 };
 GLdouble camera_up[3] = { 0.0, 1.0, 0.0 };
-GLfloat camera_angle = 0.0;
+GLfloat camera_angle = 0.0, camera_RL_angle = 0.0;
 GLdouble camera_ray[3] = { 0.0, 0.0, -1.0 }; // eye & angle & ray decide center 
 
 /* mouse */
-int old_mouse_pos[2] = { window_size[0]>>1, window_size[1]>>1 };
-float deltaAngle = 0.0f;
-float deltaMove = 0;
+int old_mouse_pos[2] = { window_size[0] >> 1, window_size[1] >> 1 };
 
 GLfloat r;
 Wall **Map;
@@ -84,6 +82,7 @@ void Init(void)
 	glDepthFunc(GL_LEQUAL);
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClearDepth(1.0);
+	glutSetCursor(GLUT_CURSOR_NONE);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(60.0, (GLfloat)window_size[0] / (GLfloat)window_size[1], 1.0, 100.0);
@@ -126,23 +125,23 @@ void Keyboard(unsigned char key, int x, int y)
 	{
 		case 'w':
 		case 'W':
-			camera_eye[2] -= MoveSpeed;
-			camera_center[2] -= MoveSpeed;
+			camera_eye[0] += MoveSpeed*camera_ray[0];
+			camera_eye[2] += MoveSpeed*camera_ray[2];
 			break;
 		case 's':
 		case 'S':
-			camera_eye[2] += MoveSpeed;
-			camera_center[2] += MoveSpeed;
+			camera_eye[0] -= MoveSpeed*camera_ray[0];
+			camera_eye[2] -= MoveSpeed*camera_ray[2];
 			break;
 		case 'a':
 		case 'A':
-			camera_eye[0] -= MoveSpeed;
-			camera_center[0] -= MoveSpeed;
+			camera_eye[0] -= MoveSpeed*sin(camera_RL_angle);
+			camera_eye[2] -= MoveSpeed*-cos(camera_RL_angle);
 			break;
 		case 'd':
 		case 'D':
-			camera_eye[0] += MoveSpeed;
-			camera_center[0] += MoveSpeed;
+			camera_eye[0] += MoveSpeed*sin(camera_RL_angle);
+			camera_eye[2] += MoveSpeed*-cos(camera_RL_angle);
 			break;
 		case 27: //ESC
 			exit(0);
@@ -157,7 +156,8 @@ void Mouse(int button, int state, int x, int y)
 
 void Motion(int x, int y)
 {
-	deltaAngle = x/window_size[0] * 0.001f;
-	camera_ray[0] = sin(camera_angle + deltaAngle);
-	camera_ray[2] = -cos(camera_angle + deltaAngle);
+	camera_RL_angle += ((GLdouble)x / window_size[0]) * PI;
+	camera_angle += camera_RL_angle - (PI / 2);
+	camera_ray[0] = sin(camera_angle);
+	camera_ray[2] = -cos(camera_angle);
 }
