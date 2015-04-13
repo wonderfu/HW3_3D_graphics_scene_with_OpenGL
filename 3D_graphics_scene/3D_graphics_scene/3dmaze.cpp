@@ -15,7 +15,7 @@ bool test_light = true;
 GLfloat light0_ambient[] = { 0.3, 0.3, 0.3, 1.0 };
 GLfloat light0_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
 GLfloat light0_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-GLfloat light0_position[] = { 5.0, 5.0, 5.0, 1.0 };
+GLfloat light0_position[] = { 0.0, 30.0, 0.0, 1.0 };
 
 /* Light1 */
 bool flash_light = true;
@@ -117,7 +117,7 @@ void Init(void)
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(60.0, (GLfloat)window_size[0] / (GLfloat)window_size[1], 1.0, 100.0);
+	gluPerspective(60.0, (GLfloat)window_size[0] / (GLfloat)window_size[1], 1.0, 10000.0);
 
 	DrawTexture();
 	glGenTextures(1, &texName);
@@ -161,7 +161,7 @@ void Display(void)
 	glVertex3f(-floor_half_w, Wall_H, floor_half_h);
 	glVertex3f(-floor_half_w, Wall_H, -floor_half_h);
 	glVertex3f(floor_half_w, Wall_H, -floor_half_h);
-	//floor
+	// floor
 	glNormal3f(0.0f, 1.0f, 0.0f);
 	glVertex3f(floor_half_w, -Wall_H, floor_half_h);
 	glVertex3f(floor_half_w, -Wall_H, -floor_half_h);
@@ -192,7 +192,7 @@ void Reshape(int w, int h)
 	glViewport(0, 0, (GLsizei)w, (GLsizei)h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(60.0, (GLfloat)w / (GLfloat)h, 1.0, 100.0);
+	gluPerspective(60.0, (GLfloat)w / (GLfloat)h, 1.0, 10000.0);
 	glMatrixMode(GL_MODELVIEW);
 	window_size[0] = w;
 	window_size[1] = h;
@@ -230,14 +230,6 @@ void Keyboard(unsigned char key, int x, int y)
 			else
 				glDisable(GL_LIGHT1);
 			break;
-		case 't':
-		case 'T':
-			test_light = !test_light;
-			if (flash_light)
-				glEnable(GL_LIGHT0);
-			else
-				glDisable(GL_LIGHT0);
-			break;
 		case 27: //ESC
 			if (build_from_file)
 			{
@@ -257,8 +249,9 @@ void Mouse(int button, int state, int x, int y)
 
 void Motion(int x, int y)
 {
-	camera_RL_angle = ((GLdouble)x / window_size[0]) * PI;
-	camera_angle = camera_RL_angle - (PI / 2);
+	camera_RL_angle = ((GLdouble)x / window_size[0]) * PI2;
+	camera_angle = camera_RL_angle - PI;
+	camera_RL_angle -= PI/2;
 	camera_ray[0] = sin(camera_angle);
 	camera_ray[2] = -cos(camera_angle);
 }
