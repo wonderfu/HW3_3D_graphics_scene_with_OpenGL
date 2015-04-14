@@ -39,6 +39,7 @@ void Mouse(int, int, int, int);
 void Motion(int, int);
 void LightSource(void);
 void DrawWall(GLfloat, GLfloat);
+void DrawCube(GLfloat, GLfloat);
 void DrawTexture(void);
 void Material(void);
 

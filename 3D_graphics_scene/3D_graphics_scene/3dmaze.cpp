@@ -40,6 +40,7 @@ int map_w, map_h;
 
 GLubyte mipmapImage32[32][32][4];
 static GLuint texName;
+GLfloat turn = 0.0;
 
 int main(int argc, char *argv[])
 {
@@ -183,6 +184,8 @@ void Display(void)
 		{
 			if (map[i][j] == Map_Wall)
 				DrawWall((map_half_h - i)*Wall_W, (map_half_w - j)*Wall_W);
+			if (map[i][j] == Map_End)
+				DrawCube((map_half_h - i)*Wall_W, (map_half_w - j)*Wall_W);
 		}
 	}
 
@@ -365,7 +368,8 @@ void DrawTexture(void)
 	}
 }
 
-void DrawWall(GLfloat x, GLfloat z){
+void DrawWall(GLfloat x, GLfloat z)
+{
 	GLfloat width = Wall_W / 2;
 
 	glPushMatrix();
@@ -402,6 +406,55 @@ void DrawWall(GLfloat x, GLfloat z){
 		glEnd();
 	glPopMatrix();
 	return;
+}
+
+void DrawCube(GLfloat x, GLfloat z)
+{
+	glPushMatrix();	
+		glTranslatef(x, 0, z);
+		glRotatef(45, -1.0, 0.0, 0.0);
+		glRotatef(45, 0.0, 0.0, 1.0);
+		glRotatef(turn, 1.0, 1.0, 1.0);
+		turn += 1;
+	
+		glBegin(GL_QUADS);
+			glColor3f(0.0, 1.0, 0.0);			// G
+			glVertex3f(0.7, 0.7, -0.7);			// TOP  UPPER RIGHT
+			glVertex3f(-0.7, 0.7, -0.7);			// TOP  UPPER LEFT
+			glVertex3f(-0.7, 0.7, 0.7);			// TOP  LOWER LEFT
+			glVertex3f(0.7, 0.7, 0.7);			// TOP  LOWER RIGHT
+	
+			glColor3f(1.0, 0.0, 1.0);			// M
+			glVertex3f(0.7, -0.7, 0.7);			// BOTTOM  UPPER RIGHT
+			glVertex3f(-0.7, -0.7, 0.7);			// BOTTOM  UPPER LEFT
+			glVertex3f(-0.7, -0.7, -0.7);			// BOTTOM  LOWER LEFT
+			glVertex3f(0.7, -0.7, -0.7);			// BOTTOM  LOWER RIGHT
+	
+			glColor3f(0.0, 1.0, 1.0);			// R
+			glVertex3f(0.7, 0.7, 0.7);			// FRONT  UPPER RIGHT
+			glVertex3f(-0.7, 0.7, 0.7);			// FRONT  UPPER LEFT
+			glVertex3f(-0.7, -0.7, 0.7);			// FRONT  LOWER LEFT
+			glVertex3f(0.7, -0.7, 0.7);			// FRONT  LOWER RIGHT
+	
+			glColor3f(1.0, 0.0, 0.0);			// C
+			glVertex3f(0.7, -0.7, -0.7);			// REAR  UPPER RIGHT
+			glVertex3f(-0.7, -0.7, -0.7);			// REAR  UPPER LEFT
+			glVertex3f(-0.7, 0.7, -0.7);			// REAR  LOWER LEFT
+			glVertex3f(0.7, 0.7, -0.7);			// REAR  LOWER RIGHT
+	
+			glColor3f(1.0, 1.0, 0.0);			// B
+			glVertex3f(-0.7, 0.7, 0.7);			// LEFT  UPPER RIGHT
+			glVertex3f(-0.7, 0.7, -0.7);			// LEFT  UPPER LEFT 
+			glVertex3f(-0.7, -0.7, -0.7);			// LEFT  LOWER LEFT 
+			glVertex3f(-0.7, -0.7, 0.7);			// LEFT  LOWER RIGHT
+	
+			glColor3f(0.0, 0.0, 1.0);			// Y
+			glVertex3f(0.7, 0.7, -0.7);			// RIGHT  UPPER RIGHT
+			glVertex3f(0.7, 0.7, 0.7);			// RIGHT  UPPER LEFT 
+			glVertex3f(0.7, -0.7, 0.7);			// RIGHT  LOWER LEFT 
+			glVertex3f(0.7, -0.7, -0.7);			// RIGHT  LOWER RIGHT
+		glEnd();
+	glPopMatrix();
 }
 
 void Material(void)
