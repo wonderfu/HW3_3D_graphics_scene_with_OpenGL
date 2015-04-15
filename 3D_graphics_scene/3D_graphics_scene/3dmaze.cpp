@@ -11,15 +11,15 @@ GLfloat camera_angle = 0.0, camera_RL_angle = 0.0;
 GLdouble camera_ray[3] = { 0.0, 0.0, -1.0 }; // eye & angle & ray decide center 
 
 /* Light0 */
-bool test_light = true;
-GLfloat light0_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
+bool test_light = false;
+GLfloat light0_ambient[] = { 0.3, 0.3, 0.3, 1.0 };
 GLfloat light0_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
 GLfloat light0_specular[] = { 1.0, 1.0, 1.0, 1.0 };
 GLfloat light0_position[] = { 0.0, 200.0, 0.0, 1.0 };
 
 /* Light1 */
 bool flash_light = true;
-GLfloat light1_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
+GLfloat light1_ambient[] = { 0.3, 0.3, 0.3, 1.0 };
 GLfloat light1_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
 GLfloat light1_specular[] = { 1.0, 1.0, 1.0, 1.0 };
 GLfloat light1_position[] = { 0.0, 0.0, 20.0, 1.0 };
@@ -313,7 +313,7 @@ void LightSource(void)
 		glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0.5);
 		glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0.2);
 
-		glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 45.0);
+		glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 30.0);
 		glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, spot_direction);
 		glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 2.0);
 	}
@@ -378,7 +378,7 @@ void DrawWall(GLfloat x, GLfloat z)
 		glBindTexture(GL_TEXTURE_2D, texName);
 		glEnable(GL_TEXTURE_2D);
 
-		glColor3f(1.0f, 0.0f, 0.0f);
+		glColor3f(0.8f, 0.0f, 0.0f);
 		glBegin(GL_QUADS);
 			glNormal3f(0.0f, 0.0f, 1.0f);
 			glTexCoord2f(10.0, 0.0); glVertex3f(width, Wall_H, width);
@@ -418,41 +418,41 @@ void DrawCube(GLfloat x, GLfloat z)
 		turn += 1;
 	
 		glBegin(GL_QUADS);
-			glColor3f(0.0, 1.0, 0.0);			// G
-			glVertex3f(0.7, 0.7, -0.7);			// TOP  UPPER RIGHT
-			glVertex3f(-0.7, 0.7, -0.7);			// TOP  UPPER LEFT
-			glVertex3f(-0.7, 0.7, 0.7);			// TOP  LOWER LEFT
-			glVertex3f(0.7, 0.7, 0.7);			// TOP  LOWER RIGHT
+			glColor3f(0.0, 1.0, 0.0);	
+			glVertex3f( 0.7, 0.7, -0.7);
+			glVertex3f(-0.7, 0.7, -0.7);
+			glVertex3f(-0.7, 0.7,  0.7);
+			glVertex3f( 0.7, 0.7,  0.7);
 	
-			glColor3f(1.0, 0.0, 1.0);			// M
-			glVertex3f(0.7, -0.7, 0.7);			// BOTTOM  UPPER RIGHT
-			glVertex3f(-0.7, -0.7, 0.7);			// BOTTOM  UPPER LEFT
-			glVertex3f(-0.7, -0.7, -0.7);			// BOTTOM  LOWER LEFT
-			glVertex3f(0.7, -0.7, -0.7);			// BOTTOM  LOWER RIGHT
+			glColor3f(1.0, 0.0, 1.0);	
+			glVertex3f( 0.7, -0.7,  0.7);
+			glVertex3f(-0.7, -0.7,  0.7);
+			glVertex3f(-0.7, -0.7, -0.7);
+			glVertex3f( 0.7, -0.7, -0.7);
 	
-			glColor3f(0.0, 1.0, 1.0);			// R
-			glVertex3f(0.7, 0.7, 0.7);			// FRONT  UPPER RIGHT
-			glVertex3f(-0.7, 0.7, 0.7);			// FRONT  UPPER LEFT
-			glVertex3f(-0.7, -0.7, 0.7);			// FRONT  LOWER LEFT
-			glVertex3f(0.7, -0.7, 0.7);			// FRONT  LOWER RIGHT
+			glColor3f(0.0, 1.0, 1.0);	
+			glVertex3f( 0.7,  0.7, 0.7);
+			glVertex3f(-0.7,  0.7, 0.7);
+			glVertex3f(-0.7, -0.7, 0.7);
+			glVertex3f( 0.7, -0.7, 0.7);
 	
-			glColor3f(1.0, 0.0, 0.0);			// C
-			glVertex3f(0.7, -0.7, -0.7);			// REAR  UPPER RIGHT
-			glVertex3f(-0.7, -0.7, -0.7);			// REAR  UPPER LEFT
-			glVertex3f(-0.7, 0.7, -0.7);			// REAR  LOWER LEFT
-			glVertex3f(0.7, 0.7, -0.7);			// REAR  LOWER RIGHT
+			glColor3f(1.0, 0.0, 0.0);	
+			glVertex3f( 0.7, -0.7, -0.7);
+			glVertex3f(-0.7, -0.7, -0.7);
+			glVertex3f(-0.7,  0.7, -0.7);
+			glVertex3f( 0.7,  0.7, -0.7);
 	
-			glColor3f(1.0, 1.0, 0.0);			// B
-			glVertex3f(-0.7, 0.7, 0.7);			// LEFT  UPPER RIGHT
-			glVertex3f(-0.7, 0.7, -0.7);			// LEFT  UPPER LEFT 
-			glVertex3f(-0.7, -0.7, -0.7);			// LEFT  LOWER LEFT 
-			glVertex3f(-0.7, -0.7, 0.7);			// LEFT  LOWER RIGHT
+			glColor3f(1.0, 1.0, 0.0);	
+			glVertex3f(-0.7,  0.7,  0.7);
+			glVertex3f(-0.7,  0.7, -0.7);
+			glVertex3f(-0.7, -0.7, -0.7);
+			glVertex3f(-0.7, -0.7,  0.7);
 	
-			glColor3f(0.0, 0.0, 1.0);			// Y
-			glVertex3f(0.7, 0.7, -0.7);			// RIGHT  UPPER RIGHT
-			glVertex3f(0.7, 0.7, 0.7);			// RIGHT  UPPER LEFT 
-			glVertex3f(0.7, -0.7, 0.7);			// RIGHT  LOWER LEFT 
-			glVertex3f(0.7, -0.7, -0.7);			// RIGHT  LOWER RIGHT
+			glColor3f(0.0, 0.0, 1.0);	
+			glVertex3f(0.7,  0.7, -0.7);
+			glVertex3f(0.7,  0.7,  0.7);
+			glVertex3f(0.7, -0.7,  0.7);
+			glVertex3f(0.7, -0.7, -0.7);
 		glEnd();
 	glPopMatrix();
 }
